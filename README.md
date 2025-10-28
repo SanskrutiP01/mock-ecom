@@ -42,9 +42,6 @@ mock-ecom/
 │
 └── README.md
 
-yaml
-Copy code
-
 ---
 
 ## ⚙️ Installation & Setup
@@ -54,8 +51,6 @@ Copy code
 git clone https://github.com/SanskrutiP01/mock-ecom.git
 cd mock-ecom
 2️⃣ Setup Backend
-bash
-Copy code
 cd backend
 npm install
 node server.js
@@ -64,9 +59,6 @@ Server runs on:
 
 3️⃣ Setup Frontend
 Open another terminal:
-
-bash
-Copy code
 cd frontend
 npm install
 npm start
@@ -102,19 +94,14 @@ Handling form validation and state updates
 Connecting frontend and backend smoothly
 
 📸 Screenshots
-Product List	Cart View	Checkout
 <img width="1360" height="582" alt="image" src="https://github.com/user-attachments/assets/b7de598c-6ec8-4ea8-a87d-d1c34b5f731d" />
 <img width="1360" height="725" alt="image" src="https://github.com/user-attachments/assets/d8dec771-7473-4d8d-aa28-409346274965" />
 <img width="1360" height="728" alt="image" src="https://github.com/user-attachments/assets/0ad9639c-3a05-44cf-aa5f-b9763606075a" />
 
-🎥 Demo Video
-🎬 Watch Demo on YouTube
-(Upload to YouTube or Loom as “Unlisted” and paste link here)
-
 👩‍💻 Author
 Sanskruti Pawaskar
 📍 MCA Student 
-🔗 SanskrutP01
+🔗 SanskrutiP01
 
 
 
