@@ -1,96 +1,122 @@
-# 🛒 Mock E-Commerce Cart
+# 🛍️ Vibe Commerce — Mock E-Commerce Cart App
 
-A simple **full-stack shopping cart** web application built for the **Vibe Commerce Screening Assignment**.  
-This project demonstrates seamless integration between a **React frontend** and a **Node.js + Express backend**, using mock product data and REST APIs — with features like Add to Cart, Remove Item, and Checkout.
+A simple **full-stack shopping cart application** built for the Vibe Commerce coding assignment.  
+It demonstrates core e-commerce features like adding/removing products, viewing cart items, and mock checkout — using **React**, **Node.js (Express)**, and **MongoDB**.
 
 ---
 
-## ⚙️ Tech Stack
+## 🚀 Project Overview
 
-**Frontend:** React (Vite)  
+This project simulates a basic shopping cart flow with mock products.  
+Users can:
+- View a list of products
+- Add or remove products from the cart
+- Checkout with name and email validation
+- Get an instant receipt confirmation (mock order)
+
+---
+
+## 🏗️ Tech Stack
+
+**Frontend:** React 
 **Backend:** Node.js, Express.js  
 **Database:** Mock Data (In-Memory)  
 **Version Control:** Git & GitHub
 
 ---
 
-## 📁 Project Structure
+## 📁 Folder Structure
+
 mock-ecom/
 │
-├── backend/
-│ ├── server.js # Express server with API routes
-│ └── package.json
-│
-├── frontend/
-│ ├── src/
-│ │ ├── App.js # Main React component
-│ │ ├── App.css # UI styling
-│ │ ├── components/ # Cart, Checkout, Product List
-│ │ └── assets/
+├── backend/ # Express server + APIs
+│ ├── server.js
 │ ├── package.json
-│ └── vite.config.js
+│
+├── frontend/ # React application
+│ ├── src/
+│ │ ├── App.js
+│ │ ├── App.css
+│ │ └── index.js
+│ ├── package.json
 │
 └── README.md
 
+yaml
+Copy code
+
 ---
 
-## 🚀 Setup Instructions
+## ⚙️ Installation & Setup
 
-### 🖥 Backend Setup
+### 1️⃣ Clone the Repository
 ```bash
+git clone https://github.com/SanskrutiP01/mock-ecom.git
+cd mock-ecom
+2️⃣ Setup Backend
+bash
+Copy code
 cd backend
 npm install
-npm start
-Runs at: http://localhost:5000
+node server.js
+Server runs on:
+👉 http://localhost:5000
 
-💻 Frontend Setup
+3️⃣ Setup Frontend
+Open another terminal:
+
 bash
 Copy code
 cd frontend
 npm install
-npm run dev
-Runs at: http://localhost:5173
+npm start
+App runs on:
+👉 http://localhost:3000
 
-✅ Make sure the backend is running before starting the frontend.
-
-🧩 Features
-✔️ Display of mock products (with name, price & description)
-✔️ Add / Remove items from cart
-✔️ Auto-calculated cart total
-✔️ Checkout with name & email validation
-✔️ Thank-you receipt popup with dynamic customer name
-✔️ Clean, responsive UI with persistent cart view
-
-📦 API Endpoints
+🔗 API Endpoints
 Method	Endpoint	Description
-GET	/api/products	Fetch all mock products
-GET	/api/cart	Fetch current cart items & total
-POST	/api/cart	Add product to cart
-DELETE	/api/cart/:id	Remove product from cart
-POST	/api/checkout	Checkout & generate receipt
+GET	/api/products	Fetch all products
+GET	/api/cart	Fetch cart items
+POST	/api/cart	Add item to cart
+DELETE	/api/cart/:id	Remove item from cart
+POST	/api/checkout	Mock checkout and generate receipt
 
-🖼 Screenshots
-Home Page	Cart View	Checkout Popup
+💻 Features
+🧾 View product list (name, description, price)
+
+🛒 Add or remove products from cart
+
+💸 Auto-calculated total price
+
+🧍 Checkout form with validation (name + email)
+
+📄 Order receipt popup with total and timestamp
+
+🧠 Key Learnings
+Building RESTful APIs with Express.js
+
+Using React Hooks for UI interactivity
+
+Handling form validation and state updates
+
+Connecting frontend and backend smoothly
+
+📸 Screenshots
+Product List	Cart View	Checkout
 <img width="1360" height="582" alt="image" src="https://github.com/user-attachments/assets/b7de598c-6ec8-4ea8-a87d-d1c34b5f731d" />
 <img width="1360" height="725" alt="image" src="https://github.com/user-attachments/assets/d8dec771-7473-4d8d-aa28-409346274965" />
 <img width="1360" height="728" alt="image" src="https://github.com/user-attachments/assets/0ad9639c-3a05-44cf-aa5f-b9763606075a" />
 
-
+🎥 Demo Video
+🎬 Watch Demo on YouTube
+(Upload to YouTube or Loom as “Unlisted” and paste link here)
 
 👩‍💻 Author
 Sanskruti Pawaskar
-🔗 SanskrutiP01
+📍 MCA Student 
+🔗 SanskrutP01
 
-🧠 Notes
-The project uses mock data (no database).
 
-Focused on core e-commerce functionality and frontend-backend communication.
-
-Designed for assignment demonstration — lightweight & easily deployable.
-
-⭐ If you like this project, consider giving it a star on GitHub!
-
----
 
 
 
