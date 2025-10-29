@@ -20,7 +20,7 @@ Users can:
 
 **Frontend:** React 
 **Backend:** Node.js, Express.js  
-**Database:** Mock Data (In-Memory)  
+**Database:** Mongo DB  
 **Version Control:** Git & GitHub
 
 ---
