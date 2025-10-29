@@ -102,11 +102,11 @@ function App() {
       {/* ✅ Products Section */}
       <div className="products-container">
         {products.map((product) => (
-          <div className="product-card" key={product.id}>
+          <div className="product-card" key={product._id}>
             <h3>{product.name}</h3>
             <p className="desc">{product.description}</p>
             <p><b>₹{product.price}</b></p>
-            <button onClick={() => addToCart(product.id)}>Add to Cart</button>
+            <button onClick={() => addToCart(product._id)}>Add to Cart</button>
           </div>
         ))}
       </div>
@@ -115,17 +115,18 @@ function App() {
       <div className="cart-container">
         <h2>🛒 Your Cart</h2>
         {cart.length === 0 ? (
-          <p>No items in cart.</p>
-        ) : (
-          cart.map((item) => (
-            <div key={item.id} className="cart-item">
-              <span>{item.name}</span>
-              <span>Qty: {item.qty}</span>
-              <span>₹{item.price * item.qty}</span>
-              <button onClick={() => removeFromCart(item.id)}>Remove</button>
-            </div>
-          ))
-        )}
+  <p>No items in cart.</p>
+) : (
+  cart.map((item) => (
+    <div key={item._id} className="cart-item">
+      <span>{item.name}</span>
+      <span>Qty: {item.qty}</span>
+      <span>₹{item.price * item.qty}</span>
+      <button onClick={() => removeFromCart(item.productId)}>Remove</button>
+    </div>
+  ))
+)}
+
       </div>
 
       {/* ✅ Checkout Section */}

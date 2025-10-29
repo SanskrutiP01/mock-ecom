@@ -1,94 +1,96 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const cors = require("cors");
-const app = express();
-const port = 5000;
 
+const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ✅ Mock Data (No image links)
-let products = [
-  { id: 1, name: "Wireless Headphones", price: 1999, description: "Comfortable over-ear headphones with noise cancellation." },
-  { id: 2, name: "Smart Watch", price: 2499, description: "Track fitness, sleep, and notifications with ease." },
-  { id: 3, name: "Bluetooth Speaker", price: 1599, description: "Portable speaker with deep bass and long battery life." },
-  { id: 4, name: "USB-C Charger", price: 499, description: "Fast charging adapter compatible with all Type-C devices." },
-  { id: 5, name: "Gaming Mouse", price: 999, description: "High-precision gaming mouse with RGB lighting." },
-  { id: 6, name: "Laptop Stand", price: 1099, description: "Ergonomic aluminum stand for better posture." },
-  { id: 7, name: "Wireless Keyboard", price: 1199, description: "Slim Bluetooth keyboard for laptop or tablet use." },
-  { id: 8, name: "Webcam", price: 1899, description: "Full HD webcam with built-in microphone." }
-];
+// ✅ Connect to MongoDB
+mongoose
+  .connect("mongodb://127.0.0.1:27017/mockEcom")
+  .then(() => console.log("✅ MongoDB connected successfully"))
+  .catch((err) => console.log("❌ MongoDB connection error:", err));
 
+// ✅ Product Schema
+const productSchema = new mongoose.Schema({
+  name: String,
+  price: Number,
+  description: String,
+});
+
+const Product = mongoose.model("Product", productSchema);
+
+// ✅ Seed Products (only if empty)
+async function seedProducts() {
+  const count = await Product.countDocuments();
+  if (count === 0) {
+    await Product.insertMany([
+      { name: "Wireless Headphones", price: 1999, description: "Comfortable over-ear headphones with noise cancellation." },
+      { name: "Smart Watch", price: 2499, description: "Track fitness, sleep, and notifications with ease." },
+      { name: "Bluetooth Speaker", price: 1599, description: "Portable speaker with deep bass and long battery life." },
+      { name: "USB-C Charger", price: 499, description: "Fast charging adapter compatible with all Type-C devices." },
+      { name: "Gaming Mouse", price: 999, description: "High-precision gaming mouse with RGB lighting." },
+      { name: "Laptop Stand", price: 1099, description: "Ergonomic aluminum stand for better posture." },
+      { name: "Wireless Keyboard", price: 1199, description: "Slim Bluetooth keyboard for laptop or tablet use." },
+      { name: "Webcam", price: 1899, description: "Full HD webcam with built-in microphone." },
+    ]);
+    console.log("🌱 Sample products seeded!");
+  }
+}
+seedProducts();
+
+// ✅ In-memory Cart
 let cart = [];
 
-// ✅ GET /api/products
-app.get("/api/products", (req, res) => {
+// ✅ Get all products
+app.get("/api/products", async (req, res) => {
+  const products = await Product.find();
   res.json(products);
 });
 
-// ✅ GET /api/cart
+// ✅ Get cart
 app.get("/api/cart", (req, res) => {
-  const items = cart.map((item) => {
-    const product = products.find((p) => p.id === item.productId || p.id === item.id);
-    return {
-      id: product.id,
+  const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  res.json({ items: cart, total });
+});
+
+// ✅ Add to cart
+app.post("/api/cart", async (req, res) => {
+  const { productId, qty } = req.body;
+  const product = await Product.findById(productId);
+
+  if (!product) return res.status(404).json({ message: "Product not found" });
+
+  const existing = cart.find((item) => item.productId === productId);
+  if (existing) {
+    existing.qty += qty || 1;
+  } else {
+    cart.push({
+      productId,
       name: product.name,
       price: product.price,
-      qty: item.qty,
-    };
-  });
-
-  const total = items.reduce((sum, item) => sum + item.price * item.qty, 0);
-  res.json({ items, total });
-});
-
-// ✅ POST /api/cart
-app.post("/api/cart", (req, res) => {
-  const { productId, qty } = req.body;
-  const product = products.find((p) => p.id === Number(productId));
-
-  if (!product) return res.status(404).json({ error: "Product not found" });
-
-  const existing = cart.find((item) => item.productId === Number(productId));
-  if (existing) {
-    existing.qty += qty;
-  } else {
-    cart.push({ productId: Number(productId), qty });
+      qty: qty || 1,
+    });
   }
 
-  res.json({ message: "Added to cart successfully", cart });
+  res.json({ message: "Item added to cart", items: cart });
 });
 
-// ✅ DELETE /api/cart/:id
+// ✅ Remove item from cart
 app.delete("/api/cart/:id", (req, res) => {
-  const productId = Number(req.params.id);
-  const index = cart.findIndex(
-    (item) => item.productId === productId || item.id === productId
-  );
-
-  if (index === -1) {
-    return res.status(404).json({ error: "Item not found in cart" });
-  }
-
-  cart.splice(index, 1);
-  res.json({ message: "Item removed successfully", cart });
+  cart = cart.filter((item) => item.productId !== req.params.id);
+  res.json({ message: "Item removed", items: cart });
 });
 
-// ✅ POST /api/checkout
+// ✅ Checkout
 app.post("/api/checkout", (req, res) => {
-  const { cartItems, customerName, customerEmail } = req.body;
+  const { customerName, customerEmail, cartItems } = req.body;
 
-  if (!cartItems || cartItems.length === 0) {
-    return res.status(400).json({ error: "Cart is empty" });
-  }
+  if (!customerName || !customerEmail)
+    return res.status(400).json({ message: "Invalid name or email" });
 
-  // Fix: Support both id and productId
-  const total = cartItems.reduce((sum, item) => {
-    const product = products.find(
-      (p) => p.id === item.productId || p.id === item.id
-    );
-    return sum + (product ? product.price * item.qty : 0);
-  }, 0);
-
+  const total = cartItems.reduce((sum, item) => sum + item.price * item.qty, 0);
   const receipt = {
     customer: customerName,
     email: customerEmail,
@@ -96,13 +98,12 @@ app.post("/api/checkout", (req, res) => {
     timestamp: new Date().toISOString(),
   };
 
-  // Clear cart after checkout
-  cart = [];
+  cart = []; // clear cart
   res.json(receipt);
 });
 
-
 // ✅ Start Server
-app.listen(port, () =>
-  console.log(`✅ Server running on http://localhost:${port}`)
+const PORT = 5000;
+app.listen(PORT, () =>
+  console.log(`🚀 Server running on http://localhost:${PORT}`)
 );
